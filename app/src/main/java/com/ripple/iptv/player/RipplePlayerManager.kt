@@ -2,6 +2,7 @@ package com.ripple.iptv.player
 
 import android.content.Context
 import androidx.annotation.OptIn
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultHttpDataSource
@@ -15,33 +16,42 @@ class RipplePlayerManager(private val context: Context) {
     var player: ExoPlayer? = null
         private set
 
-    // Yahan hum Python script se mile hue headers (User-Agent, Token) inject karenge
-    fun initializePlayer(headers: Map<String, String> = emptyMap()) {
+    fun initializePlayer() {
         if (player != null) return
+        
+        player = ExoPlayer.Builder(context).build()
+    }
 
+    // Playback function with Header and DRM support
+    fun playStream(url: String, headers: Map<String, String>? = null, drmLicenseUrlOrJson: String? = null) {
         val dataSourceFactory = DefaultHttpDataSource.Factory()
             .setAllowCrossProtocolRedirects(true)
-            .setDefaultRequestProperties(headers)
+            
+        // Agar channel me specific headers (User-Agent, Cookie) hain toh lagao
+        if (!headers.isNullOrEmpty()) {
+            dataSourceFactory.setDefaultRequestProperties(headers)
+        }
 
         val mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
             .setDrmSessionManagerProvider(DefaultDrmSessionManagerProvider())
+            
+        player?.setMediaSourceFactory(mediaSourceFactory)
 
-        player = ExoPlayer.Builder(context)
-            .setMediaSourceFactory(mediaSourceFactory)
-            .build()
-    }
-
-    // Stream URL aur DRM (ClearKey) parameters chalane ke liye
-    fun playStream(url: String, clearKeyId: String? = null, clearKeyKey: String? = null) {
         val mediaItemBuilder = MediaItem.Builder().setUri(url)
 
-        if (!clearKeyId.isNullOrEmpty() && !clearKeyKey.isNullOrEmpty()) {
-            val keyString = "{\"keys\":[{\"kty\":\"oct\",\"k\":\"$clearKeyKey\",\"kid\":\"$clearKeyId\"}],\"type\":\"temporary\"}"
-            val drmConfiguration = MediaItem.DrmConfiguration.Builder(androidx.media3.common.C.CLEARKEY_UUID)
-                .setLicenseUri("data:," + keyString)
-                .build()
+        // Jio aur doosre DRM streams ke liye
+        if (!drmLicenseUrlOrJson.isNullOrEmpty()) {
+            val drmConfiguration = MediaItem.DrmConfiguration.Builder(C.CLEARKEY_UUID)
             
-            mediaItemBuilder.setDrmConfiguration(drmConfiguration)
+            // Check if it's a direct JSON string for Jio
+            if (drmLicenseUrlOrJson.trim().startsWith("{")) {
+                drmConfiguration.setLicenseUri("data:,$drmLicenseUrlOrJson")
+            } else {
+                drmConfiguration.setLicenseUri(drmLicenseUrlOrJson)
+            }
+            
+            drmConfiguration.setMultiSession(true)
+            mediaItemBuilder.setDrmConfiguration(drmConfiguration.build())
         }
 
         player?.apply {
