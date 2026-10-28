@@ -1,10 +1,13 @@
 package com.ripple.iptv.ui.player
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.ripple.iptv.databinding.FragmentPlayerBinding
 import com.ripple.iptv.player.RipplePlayerManager
@@ -13,15 +16,19 @@ class PlayerFragment : Fragment() {
 
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
-    private lateinit var playerManager: RipplePlayerManager
     
-    // SafeArgs plugin ye parameter (streamUrl) automatic le aayega
-    private val args: PlayerFragmentArgs by navArgs()
+    private lateinit var playerManager: RipplePlayerManager
+    private val args: PlayerFragmentArgs by navArgs() // Gets data sent from ChannelsFragment
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    private val handler = Handler(Looper.getMainLooper())
+    private val updateProgressRunnable = object : Runnable {
+        override fun run() {
+            updateSeekbar()
+            handler.postDelayed(this, 1000)
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -29,42 +36,75 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Engine initialize karna
+        // Initialize pure Player Engine
         playerManager = RipplePlayerManager(requireContext())
-        
-        // ExoPlayer ko UI (PlayerView) ke sath link karna
+        playerManager.initializePlayer()
         binding.playerView.player = playerManager.player
 
-        // Yahan par aage chalkar hum Jio/SonyLIV ke liye custom User-Agent aur tokens daal sakte hain
-        val customHeaders = mapOf(
-            "User-Agent" to "Ripple-IPTV-Player/1.0"
-        )
-        playerManager.initializePlayer(customHeaders)
+        // Setup channel info
+        binding.epgChannelName.text = args.channelName
 
-        // SafeArgs se URL nikalna aur play karna
-        val streamUrl = args.streamUrl
-        if (streamUrl.isNotEmpty()) {
-            playerManager.playStream(streamUrl)
+        // Start playback
+        val url = args.streamUrl
+        val drmData = args.drmData
+        if (url.isNotEmpty()) {
+            playerManager.playStream(url = url, drmLicenseUrlOrJson = drmData)
         }
 
-        setupCustomControls()
+        setupControls()
+        handler.post(updateProgressRunnable)
     }
 
-    private fun setupCustomControls() {
-        binding.btnPlay.setOnClickListener {
-            playerManager.player?.let { exo ->
-                if (exo.isPlaying) exo.pause() else exo.play()
-            }
+    private fun setupControls() {
+        // Back Button
+        binding.btnBackToPlaylists.setOnClickListener {
+            findNavController().navigateUp()
         }
 
-        binding.btnBackToPlaylists.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
+        // Play / Pause Toggle
+        binding.btnPlay.setOnClickListener {
+            playerManager.player?.let { exo ->
+                if (exo.isPlaying) {
+                    exo.pause()
+                    binding.btnPlay.text = "▶"
+                } else {
+                    exo.play()
+                    binding.btnPlay.text = "||"
+                }
+            }
         }
+    }
+
+    private fun updateSeekbar() {
+        val player = playerManager.player ?: return
+        val duration = player.duration
+        val position = player.currentPosition
+
+        if (duration > 0 && duration != androidx.media3.common.C.TIME_UNSET) {
+            binding.customSeekbar.max = duration.toInt()
+            binding.customSeekbar.progress = position.toInt()
+            binding.tvTotalDuration.text = formatTime(duration)
+            binding.tvCurrentTime.text = formatTime(position)
+        } else {
+            // Live Stream
+            binding.customSeekbar.progress = 0
+            binding.tvTotalDuration.text = "LIVE"
+            binding.tvCurrentTime.text = formatTime(position)
+        }
+    }
+
+    private fun formatTime(ms: Long): String {
+        val totalSecs = (ms / 1000).toInt()
+        val secs = totalSecs % 60
+        val mins = (totalSecs / 60) % 60
+        val hrs = totalSecs / 3600
+        return if (hrs > 0) String.format("%02d:%02d:%02d", hrs, mins, secs)
+        else String.format("%02d:%02d", mins, secs)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // Fragment band hote hi player release kar dena chahiye warna aawaz piche chalti rahegi
+        handler.removeCallbacks(updateProgressRunnable)
         playerManager.releasePlayer()
         _binding = null
     }
