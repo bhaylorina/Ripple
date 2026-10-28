@@ -9,7 +9,7 @@ buildscript {
 }
 
 plugins {
-    // 🔥 Updated to 8.7.2 to support API 36
     id("com.android.application") version "8.7.2" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.24" apply false
+    // 🔥 Yahan 1.9.24 ki jagah 2.3.0 kar diya gaya hai
+    id("org.jetbrains.kotlin.android") version "2.3.0" apply false 
 }
