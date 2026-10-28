@@ -1,7 +1,10 @@
 buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
     dependencies {
-        // Jetpack Navigation SafeArgs plugin
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.7.7")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.8.3")
     }
 }
 
