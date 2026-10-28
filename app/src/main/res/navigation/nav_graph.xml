@@ -5,14 +5,12 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/channelsFragment">
 
-    <!-- Screen 1: Channels List -->
+    <!-- Screen 1: Channels & Playlists -->
     <fragment
         android:id="@+id/channelsFragment"
         android:name="com.ripple.iptv.ui.channels.ChannelsFragment"
         android:label="Channels"
         tools:layout="@layout/fragment_channels">
-        
-        <!-- Channels se Player par jaane ka rasta -->
         <action
             android:id="@+id/action_channelsFragment_to_playerFragment"
             app:destination="@id/playerFragment" />
@@ -25,9 +23,18 @@
         android:label="Player"
         tools:layout="@layout/fragment_player">
         
-        <!-- SafeArgs: Player ko URL chahiye play karne ke liye -->
+        <!-- SafeArgs: Player ko jo details play karne ke liye chahiye -->
         <argument
             android:name="streamUrl"
             app:argType="string" />
+        <argument
+            android:name="channelName"
+            app:argType="string" />
+        <argument
+            android:name="drmData"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
+
 </navigation>
