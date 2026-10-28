@@ -2,8 +2,8 @@ name: Build Ripple APK
 
 on:
   push:
-    branches: [ "main" ] # Agar aapki branch ka naam master hai toh "master" likhna
-  workflow_dispatch: # Ye aapko manual run karne ka button dega
+    branches: [ "main" ] 
+  workflow_dispatch: 
 
 jobs:
   build:
@@ -24,8 +24,8 @@ jobs:
 
     - name: Generate Wrapper and Build APK
       run: |
-        # Ye command automatically aapke liye Gradle set karegi aur APK banayegi
-        gradle wrapper --gradle-version 8.4
+        # 🔥 Yahan 8.4 se update karke 8.9 kar diya gaya hai
+        gradle wrapper --gradle-version 8.9
         ./gradlew assembleDebug
 
     - name: Upload APK
