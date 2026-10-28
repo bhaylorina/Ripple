@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.ripple.iptv"
-    compileSdk = 36 // 🔥 Yahan 34 ki jagah 36 karna zaroori hai
+    compileSdk = 36 
 
     defaultConfig {
         applicationId = "com.ripple.iptv"
         minSdk = 24
-        targetSdk = 34 // Target 34 hi theek hai play store ke liye
+        targetSdk = 34 
         versionCode = 1
         versionName = "1.0"
         
@@ -38,10 +38,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    
-    kotlinOptions {
-        jvmTarget = "17"
-    }
+
+    // 🔥 kotlinOptions block removed from here as required by Kotlin 2.x
 
     buildFeatures {
         viewBinding = true
