@@ -35,7 +35,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"/>
 
-        <!-- EPG STRIP (Controls ke theek upar) -->
+        <!-- EPG STRIP -->
         <LinearLayout
             android:id="@+id/epg_strip_layout"
             android:layout_width="match_parent"
@@ -45,85 +45,69 @@
             android:layout_marginRight="70dp"
             android:translationY="18dp" 
             android:background="#80000000" 
-            android:padding="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:visibility="gone">
 
-            <ImageView
-                android:id="@+id/epg_channel_logo"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_marginEnd="10dp"
-                android:scaleType="fitCenter" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/epg_channel_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Channel Name"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <!-- Current Show with Yellow Progress Bar -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-                    <TextView
-                        android:id="@+id/epg_current_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Current Show"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp"
-                        android:layout_marginEnd="15dp" 
-                        android:maxLines="1"/>
-                    <ProgressBar
-                        android:id="@+id/epg_current_progress"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="0dp"
-                        android:layout_height="6dp"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="15dp"
-                        android:progressTint="#FFC107"
-                        android:progressBackgroundTint="#55FFFFFF" />
-                    <TextView
-                        android:id="@+id/epg_current_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="00:00 - 00:00"
-                        android:textColor="#E0E0E0"
-                        android:textSize="16sp" />
+            <ImageView android:id="@+id/epg_channel_logo" android:layout_width="65dp" android:layout_height="65dp" android:layout_marginEnd="10dp" android:scaleType="fitCenter" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                <TextView android:id="@+id/epg_channel_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Channel Name" android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="1dp">
+                    <TextView android:id="@+id/epg_current_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Current Show" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" android:layout_marginEnd="15dp" android:ellipsize="end" android:maxLines="1"/>
+                    <ProgressBar android:id="@+id/epg_current_progress" style="?android:attr/progressBarStyleHorizontal" android:layout_width="0dp" android:layout_height="6dp" android:layout_weight="1" android:layout_marginEnd="15dp" android:progressTint="#FFC107" android:progressBackgroundTint="#55FFFFFF" />
+                    <TextView android:id="@+id/epg_current_time" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="00:00 - 00:00" android:textColor="#E0E0E0" android:textSize="16sp" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:visibility="gone" android:layout_marginTop="1dp">
+                    <TextView android:id="@+id/epg_next_time" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="00:00 - 00:00" android:textColor="#A3A3A3" android:textSize="13sp" />
+                    <TextView android:id="@+id/epg_next_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:text="Next Show" android:textColor="#CCCCCC" android:textSize="14sp" android:ellipsize="end" android:maxLines="1"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Bottom Controls Layout -->
+        <!-- BOTTOM CONTROLS -->
         <LinearLayout
             android:id="@+id/bottomControlsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:weightSum="6"
-            android:gravity="center"
-            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:background="@android:color/transparent"> 
-            
-            <Button android:id="@+id/btnScale" android:layout_width="0dp" android:layout_height="50dp" android:layout_weight="1" android:text="✥" android:textSize="22sp" android:background="#00000000" android:textColor="#FFFFFF"/>
-            <Button android:id="@+id/btnRew" android:layout_width="0dp" android:layout_height="50dp" android:layout_weight="1" android:text="⏪" android:textSize="18sp" android:background="#00000000" android:textColor="#FFFFFF"/>
-            <Button android:id="@+id/btnPlay" android:layout_width="0dp" android:layout_height="60dp" android:layout_weight="1" android:text="▶" android:textSize="28sp" android:background="#00000000" android:textColor="#FFFFFF"/>
-            <Button android:id="@+id/btnFwd" android:layout_width="0dp" android:layout_height="50dp" android:layout_weight="1" android:text="⏩" android:textSize="18sp" android:background="#00000000" android:textColor="#FFFFFF"/>
-            <Button android:id="@+id/btnQuality" android:layout_width="0dp" android:layout_height="50dp" android:layout_weight="1" android:text="⚙" android:textSize="22sp" android:background="#00000000" android:textColor="#FFFFFF"/>
-            <Button android:id="@+id/btnFullscreen" android:layout_width="0dp" android:layout_height="50dp" android:layout_weight="1" android:text="⛶" android:textSize="22sp" android:background="#00000000" android:textColor="#FFFFFF"/>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="6" android:gravity="center" android:layout_marginBottom="5dp"> 
+                <Button android:id="@+id/btnScale" android:layout_width="0dp" android:layout_height="50dp" android:layout_weight="1" android:text="✥" android:textSize="22sp" android:background="#00000000" android:textColor="#FFFFFF"/>
+                <Button android:id="@+id/btnRew" android:layout_width="0dp" android:layout_height="50dp" android:layout_weight="1" android:text="⏪" android:textSize="18sp" android:background="#00000000" android:textColor="#FFFFFF"/>
+                <Button android:id="@+id/btnPlay" android:layout_width="0dp" android:layout_height="60dp" android:layout_weight="1" android:text="▶" android:textSize="28sp" android:background="#00000000" android:textColor="#FFFFFF"/>
+                <Button android:id="@+id/btnFwd" android:layout_width="0dp" android:layout_height="50dp" android:layout_weight="1" android:text="⏩" android:textSize="18sp" android:background="#00000000" android:textColor="#FFFFFF"/>
+                <Button android:id="@+id/btnQuality" android:layout_width="0dp" android:layout_height="50dp" android:layout_weight="1" android:text="⚙" android:textSize="22sp" android:background="#00000000" android:textColor="#FFFFFF"/>
+                <Button android:id="@+id/btnFullscreen" android:layout_width="0dp" android:layout_height="50dp" android:layout_weight="1" android:text="⛶" android:textSize="22sp" android:background="#00000000" android:textColor="#FFFFFF"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="10dp"> 
+                <TextView android:id="@+id/tvCurrentTime" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="00:00" android:textColor="#FFFFFF" android:textSize="12sp" android:layout_marginRight="8dp"/>
+                <SeekBar android:id="@+id/customSeekbar" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:progressTint="#FFC107" android:thumbTint="#FFC107" android:progressBackgroundTint="#88FFFFFF"/>
+                <TextView android:id="@+id/tvTotalDuration" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="00:00" android:textColor="#FFFFFF" android:textSize="12sp" android:layout_marginLeft="8dp"/>
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
+
+    <!-- QUICK CHANNEL OVERLAY LIST -->
+    <ListView
+        android:id="@+id/overlayChannelListView"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="#B3000000"
+        android:divider="#333333"
+        android:dividerHeight="1dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:visibility="gone"
+        android:clipToPadding="false" />
+
 </FrameLayout>
