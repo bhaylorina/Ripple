@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/channelsFragment">
+
+    <!-- Screen 1: Channels List -->
+    <fragment
+        android:id="@+id/channelsFragment"
+        android:name="com.ripple.iptv.ui.channels.ChannelsFragment"
+        android:label="Channels"
+        tools:layout="@layout/fragment_channels">
+        
+        <!-- Channels se Player par jaane ka rasta -->
+        <action
+            android:id="@+id/action_channelsFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
+    </fragment>
+
+    <!-- Screen 2: Video Player -->
+    <fragment
+        android:id="@+id/playerFragment"
+        android:name="com.ripple.iptv.ui.player.PlayerFragment"
+        android:label="Player"
+        tools:layout="@layout/fragment_player">
+        
+        <!-- SafeArgs: Player ko URL chahiye play karne ke liye -->
+        <argument
+            android:name="streamUrl"
+            app:argType="string" />
+    </fragment>
+</navigation>
