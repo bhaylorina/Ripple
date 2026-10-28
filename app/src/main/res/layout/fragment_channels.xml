@@ -3,8 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#000000">
+    android:background="#000000"
+    android:paddingTop="20dp">
 
+    <!-- HEADER & CATEGORY BUTTONS -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,73 +15,102 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
         android:layout_marginBottom="15dp"/>
 
-    <!-- Search Bar -->
-    <EditText
-        android:id="@+id/searchBar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search Channels..."
-        android:padding="12dp"
-        android:background="#222222"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#AAAAAA"
-        android:maxLines="1"
-        android:inputType="text"/>
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp">
 
-    <LinearLayout
-        android:id="@+id/groupFilterBar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:background="#111111">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+            <Button android:id="@+id/tabMovie" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_margin="2dp" android:text="MOVIE" android:textSize="12sp" android:backgroundTint="#222222" android:textColor="#FFFFFF" />
+            <Button android:id="@+id/tabEnt" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_margin="2dp" android:text="ENTERTAIN" android:textSize="11sp" android:backgroundTint="#222222" android:textColor="#FFFFFF" />
+            <Button android:id="@+id/tabInfo" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_margin="2dp" android:text="INFO" android:textSize="12sp" android:backgroundTint="#222222" android:textColor="#FFFFFF" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/btnShowAll"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="ALL CHANNELS"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#AA00FF"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"/>
-
-        <Button
-            android:id="@+id/btnShowGroups"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="GROUPS"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:textColor="#AAAAAA"
-            android:backgroundTint="#333333"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+            <Button android:id="@+id/tabNews" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_margin="2dp" android:text="NEWS" android:textSize="12sp" android:backgroundTint="#222222" android:textColor="#FFFFFF" />
+            <Button android:id="@+id/tabGuj" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_margin="2dp" android:text="GUJARATI" android:textSize="11sp" android:backgroundTint="#222222" android:textColor="#FFFFFF" />
+            <Button android:id="@+id/tabMusic" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_margin="2dp" android:text="MUSIC" android:textSize="12sp" android:backgroundTint="#222222" android:textColor="#FFFFFF" />
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- Upgraded from ListView to RecyclerView for smooth scrolling -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/channelRecyclerView"
+    <!-- LISTS FLIPPER (Playlists vs Channels) -->
+    <ViewFlipper
+        android:id="@+id/listFlipper"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"/>
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnAddPlaylist"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:text="+ ADD PLAYLIST"
-        android:backgroundTint="#AA00FF"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:layout_margin="10dp"/>
+        <!-- SCREEN 0: PLAYLISTS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            
+            <ListView
+                android:id="@+id/playlistListView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:divider="@null"/>
 
+            <Button
+                android:id="@+id/btnAddPlaylist"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="+ ADD PLAYLIST"
+                android:backgroundTint="#AA00FF"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:layout_margin="10dp"/>
+        </LinearLayout>
+
+        <!-- SCREEN 1: CHANNELS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/searchBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search Channels..."
+                android:padding="12dp"
+                android:background="#222222"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA"
+                android:maxLines="1"
+                android:inputType="text"/>
+
+            <LinearLayout
+                android:id="@+id/groupFilterBar"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:background="#111111">
+                <Button android:id="@+id/btnShowAll" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:text="ALL CHANNELS" android:textSize="13sp" android:textStyle="bold" android:textColor="#FFFFFF" android:backgroundTint="#AA00FF" android:insetTop="0dp" android:insetBottom="0dp"/>
+                <Button android:id="@+id/btnShowGroups" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:text="GROUPS" android:textSize="13sp" android:textStyle="bold" android:textColor="#AAAAAA" android:backgroundTint="#333333" android:insetTop="0dp" android:insetBottom="0dp"/>
+            </LinearLayout>
+            
+            <!-- Modern RecyclerView for buttery smooth scrolling -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/channelRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#000000"/>
+        </LinearLayout>
+    </ViewFlipper>
 </LinearLayout>
