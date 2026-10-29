@@ -19,37 +19,26 @@ class RipplePlayerManager(private val context: Context) {
     fun initializePlayer() {
         if (player != null) return
         
-        player = ExoPlayer.Builder(context).build()
-    }
-
-    // Playback function with Header and DRM support
-    fun playStream(url: String, headers: Map<String, String>? = null, drmLicenseUrlOrJson: String? = null) {
-        val dataSourceFactory = DefaultHttpDataSource.Factory()
-            .setAllowCrossProtocolRedirects(true)
-            
-        // Agar channel me specific headers (User-Agent, Cookie) hain toh lagao
-        if (!headers.isNullOrEmpty()) {
-            dataSourceFactory.setDefaultRequestProperties(headers)
-        }
-
+        val dataSourceFactory = DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true)
         val mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
             .setDrmSessionManagerProvider(DefaultDrmSessionManagerProvider())
-            
-        player?.setMediaSourceFactory(mediaSourceFactory)
 
+        // Correct Media3 builder pattern
+        player = ExoPlayer.Builder(context)
+            .setMediaSourceFactory(mediaSourceFactory)
+            .build()
+    }
+
+    fun playStream(url: String, headers: Map<String, String>? = null, drmLicenseUrlOrJson: String? = null) {
         val mediaItemBuilder = MediaItem.Builder().setUri(url)
 
-        // Jio aur doosre DRM streams ke liye
         if (!drmLicenseUrlOrJson.isNullOrEmpty()) {
             val drmConfiguration = MediaItem.DrmConfiguration.Builder(C.CLEARKEY_UUID)
-            
-            // Check if it's a direct JSON string for Jio
             if (drmLicenseUrlOrJson.trim().startsWith("{")) {
                 drmConfiguration.setLicenseUri("data:,$drmLicenseUrlOrJson")
             } else {
                 drmConfiguration.setLicenseUri(drmLicenseUrlOrJson)
             }
-            
             drmConfiguration.setMultiSession(true)
             mediaItemBuilder.setDrmConfiguration(drmConfiguration.build())
         }
