@@ -33,5 +33,8 @@
             </intent-filter>
         </activity>
 
+        <!-- 🔥 SettingsActivity yahan register kar di gayi hai -->
+        <activity android:name=".SettingsActivity" />
+
     </application>
 </manifest>
