@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.ripple.iptv.R
-import com.ripple.iptv.models.Channel // 🔥 Fixed import reference
+import com.ripple.iptv.models.Channel
 import com.ripple.iptv.core.IptvParser
 import com.ripple.iptv.databinding.FragmentChannelsBinding
 import kotlinx.coroutines.Dispatchers
@@ -45,16 +45,19 @@ class ChannelsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Setup RecyclerView with our Modern Adapter
         channelAdapter = ChannelAdapter(displayChannels) { selectedChannel ->
             playChannel(selectedChannel)
         }
         binding.channelRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.channelRecyclerView.adapter = channelAdapter
 
+        // Test Playlist Button
         binding.btnAddPlaylist.setOnClickListener {
             loadPlaylist("https://iptv-org.github.io/iptv/languages/hin.m3u")
         }
 
+        // Search Bar Logic
         binding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -118,14 +121,15 @@ class ChannelsFragment : Fragment() {
         _binding = null
     }
 
+    // 🔥 Modern RecyclerView Adapter (Fully fixed with exact R references)
     inner class ChannelAdapter(
         private val items: List<Channel>,
         private val onItemClick: (Channel) -> Unit
     ) : RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder>() {
 
         inner class ChannelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val tvName: TextView = itemView.findViewById(R.id.tvChannelName)
-            val imgLogo: ImageView = itemView.findViewById(R.id.imgLogo)
+            val tvName: TextView = itemView.findViewById(com.ripple.iptv.R.id.tvChannelName)
+            val imgLogo: ImageView = itemView.findViewById(com.ripple.iptv.R.id.imgLogo)
             
             init {
                 itemView.setOnClickListener { onItemClick(items[adapterPosition]) }
@@ -133,7 +137,7 @@ class ChannelsFragment : Fragment() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_channel, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(com.ripple.iptv.R.layout.list_item_channel, parent, false)
             return ChannelViewHolder(view)
         }
 
