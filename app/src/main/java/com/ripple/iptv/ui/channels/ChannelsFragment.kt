@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.ripple.iptv.R
-import com.ripple.iptv.core.Channel
+import com.ripple.iptv.models.Channel // 🔥 Fixed import reference
 import com.ripple.iptv.core.IptvParser
 import com.ripple.iptv.databinding.FragmentChannelsBinding
 import kotlinx.coroutines.Dispatchers
@@ -45,20 +45,16 @@ class ChannelsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // RecyclerView Setup
         channelAdapter = ChannelAdapter(displayChannels) { selectedChannel ->
             playChannel(selectedChannel)
         }
         binding.channelRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.channelRecyclerView.adapter = channelAdapter
 
-        // Test Playlist Button
         binding.btnAddPlaylist.setOnClickListener {
-            // Yahan hum ek safe aur free test HLS link daal rahe hain testing ke liye
             loadPlaylist("https://iptv-org.github.io/iptv/languages/hin.m3u")
         }
 
-        // Search Bar Logic
         binding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -71,7 +67,6 @@ class ChannelsFragment : Fragment() {
     private fun loadPlaylist(url: String) {
         Toast.makeText(requireContext(), "Loading Playlist...", Toast.LENGTH_SHORT).show()
         
-        // Coroutine background thread me parse karega taaki UI hang na ho
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val request = Request.Builder().url(url).build()
@@ -85,8 +80,6 @@ class ChannelsFragment : Fragment() {
                         allChannels.clear()
                         allChannels.addAll(parsedChannels)
                         filterChannels("")
-                        
-                        // Flipper ko Channels list par switch karna
                         binding.listFlipper.displayedChild = 1
                     } else {
                         Toast.makeText(requireContext(), "No channels found!", Toast.LENGTH_SHORT).show()
@@ -112,11 +105,10 @@ class ChannelsFragment : Fragment() {
     }
 
     private fun playChannel(channel: Channel) {
-        // Navigation Graph ke through Player screen ko URL bhejna
         val action = ChannelsFragmentDirections.actionChannelsFragmentToPlayerFragment(
             streamUrl = channel.url,
             channelName = channel.name,
-            drmData = channel.drmLicenseUrl ?: "" // JSON key array or License URL
+            drmData = channel.drmLicenseUrl ?: ""
         )
         findNavController().navigate(action)
     }
@@ -126,7 +118,6 @@ class ChannelsFragment : Fragment() {
         _binding = null
     }
 
-    // Modern RecyclerView Adapter (Replaces old laggy ListView)
     inner class ChannelAdapter(
         private val items: List<Channel>,
         private val onItemClick: (Channel) -> Unit
